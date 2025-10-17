@@ -1,0 +1,12 @@
+[submodule "Lango"]
+	path = Lango
+	url = https://github.com/whycody/Lango.git
+	branch = main
+[submodule "Lango_NodeAPI"]
+	path = Lango_NodeAPI
+	url = https://github.com/whycody/Lango_NodeAPI.git
+	branch = main
+[submodule "Lango_FastAPI"]
+	path = Lango_FastAPI
+	url = https://github.com/whycody/Lango_FastAPI.git
+	branch = main
