@@ -13,6 +13,7 @@ services:
       - mongo-data:/data/db
     networks:
       - lango-net
+    restart: unless-stopped
 
   node-api:
     build: ./Lango_NodeAPI
