@@ -1,4 +1,19 @@
 services:
+  mongo:
+    image: mongo:7
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    ports:
+      - "27018:27017"
+    command: mongod --bind_ip_all --quiet --logpath /dev/null
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - lango-net
+
   node-api:
     build: ./Lango_NodeAPI
     container_name: node-api
@@ -14,6 +29,8 @@ services:
     env_file:
       - ./Lango_NodeAPI/.env
       - .env
+    depends_on:
+      - mongo
     networks:
       - lango-net
     restart: unless-stopped
@@ -30,7 +47,12 @@ services:
       - .env
     networks:
       - lango-net
+    depends_on:
+      - mongo
     restart: unless-stopped
+
+volumes:
+  mongo-data:
 
 networks:
   lango-net:
