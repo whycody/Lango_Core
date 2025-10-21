@@ -1,0 +1,65 @@
+services:
+  mongo:
+    image: mongo:7
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - lango-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 30s
+
+  node-api:
+    image: lango_core_nodeapi:prod
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./Lango_NodeAPI/.env
+      - .env
+    networks:
+      - lango-net
+    depends_on:
+      - mongo
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 30s
+
+  fastapi:
+    image: lango_core_fastapi:prod
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    networks:
+      - lango-net
+    depends_on:
+      - mongo
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 30s
+
+volumes:
+  mongo-data:
+
+networks:
+  lango-net:
+    driver: overlay
