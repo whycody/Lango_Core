@@ -1,5 +1,6 @@
 *.log
 .idea/
 .env
+redeploy.sh
 commands.txt
 Lango_Lemmas/
