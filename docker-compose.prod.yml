@@ -19,7 +19,7 @@ services:
         max_attempts: 5
         window: 30s
 
-  node-api:
+  nodeapi:
     image: lango_core_nodeapi:prod
     ports:
       - "3000:3000"
