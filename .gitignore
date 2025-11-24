@@ -3,5 +3,6 @@
 .env
 .dev.env
 redeploy.sh
+redeploy.dev.sh
 commands.txt
 Lango_Lemmas/
