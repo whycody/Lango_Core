@@ -1,0 +1,62 @@
+services:
+  mongo-dev:
+    image: mongo:7
+    container_name: mongo
+    env_file:
+      - .dev.env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    ports:
+      - "27018:27017"
+    command: mongod --bind_ip_all --quiet --logpath /dev/null
+    volumes:
+      - dev_mongo-data-dev:/data/db
+    networks:
+      - lango-dev-net
+    restart: unless-stopped
+
+  nodeapi-dev:
+    build: ./Lango_NodeAPI
+    container_name: node-api
+    volumes:
+      - ./Lango_NodeAPI/src:/app/src:cached
+      - ./Lango_NodeAPI/package.json:/app/package.json:cached
+      - ./Lango_NodeAPI/jest.config.js:/app/jest.config.js:cached
+      - ./Lango_NodeAPI/jest.setup.js:/app/jest.setup.js:cached
+      - ./Lango_NodeAPI/package-lock.json:/app/package-lock.json:cached
+      - ./Lango_NodeAPI/tsconfig.json:/app/tsconfig.json:cached
+    ports:
+      - "3010:3000"
+    env_file:
+      - ./Lango_NodeAPI/.env
+      - .dev.env
+    depends_on:
+      - mongo-dev
+    networks:
+      - lango-dev-net
+    restart: unless-stopped
+
+  fastapi-dev:
+    build: ./Lango_FastAPI
+    container_name: fastapi
+    volumes:
+      - ./Lango_FastAPI:/app:cached
+    ports:
+      - "8010:8000"
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload --reload-dir /app/src
+    env_file:
+      - .dev.env
+    networks:
+      - lango-dev-net
+    depends_on:
+      - mongo-dev
+    restart: unless-stopped
+
+volumes:
+  dev_mongo-data-dev:
+
+networks:
+  lango-dev-net:
+    driver: bridge
