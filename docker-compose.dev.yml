@@ -24,7 +24,7 @@ services:
     ports:
       - "3010:3000"
     env_file:
-      - ./Lango_NodeAPI/.env
+      - ./Lango_NodeAPI/.dev.env
       - .dev.env
     networks:
       - lango-dev-net
