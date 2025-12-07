@@ -10,3 +10,7 @@
 	path = Lango_FastAPI
 	url = https://github.com/whycody/Lango_FastAPI.git
 	branch = main
+[submodule "Lango_Worker"]
+	path = Lango_Worker
+	url = https://github.com/whycody/Lango_Worker.git
+	branch = main

@@ -52,6 +52,26 @@ services:
       - mongo
     restart: unless-stopped
 
+  worker:
+    build: ./Lango_Worker
+    container_name: worker
+    volumes:
+      - ./Lango_Worker/src:/app/src:cached
+      - ./Lango_Worker/.env:/app/.env:cached
+      - ./Lango_Worker/keys:/app/keys:cached
+    ports:
+      - "8001:8001"
+    working_dir: /app/src
+    command: uvicorn app:app --host 0.0.0.0 --port 8011 --reload --reload-dir /app/src
+    env_file:
+      - .env
+      - ./Lango_Worker/.env
+    networks:
+      - lango-net
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
 volumes:
   mongo-data:
 

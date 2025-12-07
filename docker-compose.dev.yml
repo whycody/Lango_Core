@@ -55,6 +55,23 @@ services:
         max_attempts: 5
         window: 30s
 
+  worker-dev:
+    image: whycody/lango_worker:dev
+    command: uvicorn app:app --host 0.0.0.0 --port 8011
+    env_file:
+      - .dev.env
+    networks:
+      - lango-dev-net
+    depends_on:
+      - mongo-dev
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 30s
+
 volumes:
   mongo-data-dev:
 
