@@ -62,7 +62,7 @@ services:
     ports:
       - "8001:8001"
     working_dir: /app/src
-    command: uvicorn app:app --host 0.0.0.0 --port 8011 --reload --reload-dir /app/src
+    command: uvicorn app:app --host 0.0.0.0 --port 8001 --reload --reload-dir /app/src
     env_file:
       - .env
       - ./Lango_Worker/.env
